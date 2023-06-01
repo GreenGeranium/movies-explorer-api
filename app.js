@@ -1,17 +1,13 @@
 // подключение всех библиотек
 const express = require('express');
 const mongoose = require('mongoose');
-const { celebrate, Joi, errors } = require('celebrate');
+const { errors } = require('celebrate');
 
 // логирование
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-
-// подключение роутов
-const movies = require('./routes/movies');
-const users = require('./routes/users');
-const { createUser, login } = require('./controllers/users');
-const { auth } = require('./middlewares/auth');
 const NotFoundError = require('./errors/not-found');
+const router = require('./routes');
+const { centralisedError } = require('./errors/centralised-handler');
 
 // запуск сервера с дефолтным портом 3000
 const app = express();
@@ -28,28 +24,7 @@ app.use(express.json());
 
 app.use(requestLogger);
 
-// роут логина
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-  }),
-}), login);
-
-// роут регистрации
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-    name: Joi.string().min(2).max(30),
-  }),
-}), createUser);
-
-// мидлвер автоматической аутентификации
-app.use(auth);
-
-app.use('/movies', movies);
-app.use('/users', users);
+app.use(router);
 
 app.use(errorLogger);
 
@@ -58,16 +33,7 @@ app.use(() => { throw new NotFoundError('Извините, такой стран
 
 // глобальный обработчик ошибок
 app.use(errors());
-app.use((err, req, res, next) => {
-  // если у ошибки нет статуса, выставляем 500
-  const { statusCode = 500, message } = err;
-  res.status(statusCode).send({
-    message: statusCode === 500
-      ? 'На сервере произошла ошибка'
-      : message,
-  });
-  next();
-});
+app.use(centralisedError);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
