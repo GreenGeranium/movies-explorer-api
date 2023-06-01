@@ -7,7 +7,7 @@ const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const NotFoundError = require('./errors/not-found');
 const router = require('./routes');
-const { centralisedError } = require('./errors/centralised-handler');
+const { centralisedErrorHandler} = require('./errors/centralised-handler');
 
 // запуск сервера с дефолтным портом 3000
 const app = express();
@@ -33,7 +33,7 @@ app.use(() => { throw new NotFoundError('Извините, такой стран
 
 // глобальный обработчик ошибок
 app.use(errors());
-app.use(centralisedError);
+app.use(centralisedErrorHandler);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
