@@ -7,4 +7,4 @@ module.exports.centralisedErrorHandler = (err, req, res, next) => {
       : message,
   });
   next();
-}
+};

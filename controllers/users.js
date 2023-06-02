@@ -1,6 +1,6 @@
-const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const User = require('../models/user');
 const AlreadyExistsErr = require('../errors/already-exists');
 const NotFoundError = require('../errors/not-found');
 

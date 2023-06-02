@@ -1,25 +1,16 @@
 const users = require('express').Router();
-const { celebrate, Joi } = require('celebrate');
+const { celebrate } = require('celebrate');
 const {
   updateProfile, getMyUser,
 } = require('../controllers/users');
+const { updateUserValidation } = require('../validation/validation');
 
 // возвращение пользовательских данных
-users.get('/me', celebrate({
-  params: Joi.object().keys({
-    userId: Joi.alternatives().try(Joi.string().hex().length(24), Joi.string().valid('me')),
-  }),
-}), (req, res, next) => {
-  const { userId } = req.params;
+users.get('/me', (req, res, next) => {
   getMyUser(req, res, next);
 });
 
 // обновляет профиль
-users.patch('/me', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().min(2).max(30).required(),
-    email: Joi.string().required().email(),
-  }),
-}), updateProfile);
+users.patch('/me', celebrate(updateUserValidation), updateProfile);
 
 module.exports = users;

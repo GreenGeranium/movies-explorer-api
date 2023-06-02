@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { urlRegex } = require('../utils/const');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -26,7 +27,7 @@ const movieSchema = new mongoose.Schema({
     required: [true, 'Поле "image" должно быть заполнено'],
     validate: {
       validator(v) {
-        return /^https?:\/\/(www\.)?([\w-]+).([\w\-.~:?#@!$&'()*/+,;[\]]+)/gm.test(v);
+        return urlRegex.test(v);
       },
       message: 'Поле "image" не является валидным',
     },
@@ -36,7 +37,7 @@ const movieSchema = new mongoose.Schema({
     required: [true, 'Поле "trailerLink" должно быть заполнено'],
     validate: {
       validator(v) {
-        return /^https?:\/\/(www\.)?([\w-]+).([\w\-.~:?#@!$&'()*/+,;[\]]+)/gm.test(v);
+        return urlRegex.test(v);
       },
       message: 'Поле "trailerLink" не является валидным',
     },
@@ -46,7 +47,7 @@ const movieSchema = new mongoose.Schema({
     required: [true, 'Поле "thumbnail" должно быть заполнено'],
     validate: {
       validator(v) {
-        return /^https?:\/\/(www\.)?([\w-]+).([\w\-.~:?#@!$&'()*/+,;[\]]+)/gm.test(v);
+        return urlRegex.test(v);
       },
       message: 'Поле "thumbnail" не является валидным',
     },

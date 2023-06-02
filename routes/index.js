@@ -6,7 +6,7 @@ const users = require('./users');
 const movies = require('./movies');
 const { auth } = require('../middlewares/auth');
 const { login, createUser } = require('../controllers/users');
-const { signupValidation, signinValidation} = require("../validation/validation");
+const { signupValidation, signinValidation } = require('../validation/validation');
 
 // роут логина
 router.post('/signin', celebrate(signinValidation), login);
