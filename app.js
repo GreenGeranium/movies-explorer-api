@@ -11,6 +11,16 @@ const router = require('./routes');
 const { centralisedErrorHandler } = require('./errors/centralised-handler');
 const { limiter } = require('./middlewares/ratelimiter');
 
+const allowedCors = [
+  'http://localhost:4000',
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://api.geranius.nomoredomains.rocks',
+  'https://api.geranius.nomoredomains.rocks',
+  'http://geranius.nomoredomains.rocks',
+  'https://geranius.nomoredomains.rocks',
+];
+
 // запуск сервера с дефолтным портом 3000
 const app = express();
 const { PORT = 3000 } = process.env;
@@ -26,6 +36,24 @@ mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb').then(() => {
 });
 
 app.use(express.json());
+
+// CORS
+app.use((req, res, next) => {
+  const { origin } = req.headers;
+  const { method } = req;
+  const requestHeaders = req.headers['access-control-request-headers'];
+  const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
+  if (allowedCors.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+  if (method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
+    res.header('Access-Control-Allow-Headers', requestHeaders);
+    res.end();
+  }
+
+  next();
+});
 
 app.use(requestLogger);
 
