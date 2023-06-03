@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+
 const { NODE_ENV, JWT_SECRET } = process.env;
 const User = require('../models/user');
 const AlreadyExistsErr = require('../errors/already-exists');
@@ -29,6 +30,8 @@ module.exports.createUser = (req, res, next) => {
         }
         next(err);
       });
+  }).catch((err) => {
+    next(err);
   });
 };
 
@@ -75,5 +78,11 @@ module.exports.updateProfile = (req, res, next) => {
       };
       res.send(user);
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.code === 11000) {
+        next(new AlreadyExistsErr('Данный профиль уже существует'));
+        return;
+      }
+      next(err);
+    });
 };

@@ -6,7 +6,6 @@ const helmet = require('helmet');
 
 // логирование
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const NotFoundError = require('./errors/not-found');
 const router = require('./routes');
 const { centralisedErrorHandler } = require('./errors/centralised-handler');
 const { limiter } = require('./middlewares/ratelimiter');
@@ -26,7 +25,6 @@ const app = express();
 const { PORT = 3000 } = process.env;
 
 app.use(helmet());
-app.use(limiter);
 
 // подключение к базе данных mestodb
 mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb').then(() => {
@@ -61,8 +59,7 @@ app.use(router);
 
 app.use(errorLogger);
 
-// роут несуществующей страницы
-app.use(() => { throw new NotFoundError('Извините, такой страницы не существует!'); });
+app.use(limiter);
 
 // глобальный обработчик ошибок
 app.use(errors());

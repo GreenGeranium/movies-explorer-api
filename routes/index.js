@@ -7,6 +7,7 @@ const movies = require('./movies');
 const { auth } = require('../middlewares/auth');
 const { login, createUser } = require('../controllers/users');
 const { signupValidation, signinValidation } = require('../validation/validation');
+const NotFoundError = require('../errors/not-found');
 
 // роут логина
 router.post('/signin', celebrate(signinValidation), login);
@@ -19,5 +20,8 @@ router.use(auth);
 
 router.use('/movies', movies);
 router.use('/users', users);
+
+// роут несуществующей страницы
+router.use(() => { throw new NotFoundError('Извините, такой страницы не существует!'); });
 
 module.exports = router;
