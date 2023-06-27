@@ -5,7 +5,6 @@ const { errors } = require('celebrate');
 const helmet = require('helmet');
 
 // логирование
-const cors = require('cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const router = require('./routes');
 const { centralisedErrorHandler } = require('./errors/centralised-handler');
@@ -41,7 +40,6 @@ mongoose
 app.use(express.json());
 
 // CORS
-/*
 app.use((req, res, next) => {
   const { origin } = req.headers;
   const { method } = req;
@@ -58,11 +56,6 @@ app.use((req, res, next) => {
 
   next();
 });
-*/
-
-app.use(cors({
-  origin: '*',
-}));
 
 app.use(requestLogger);
 

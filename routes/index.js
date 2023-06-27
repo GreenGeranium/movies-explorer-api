@@ -22,6 +22,6 @@ router.use('/movies', movies);
 router.use('/users', users);
 
 // роут несуществующей страницы
-router.use(() => { throw new NotFoundError('Извините, такой страницы не существует!'); });
+router.use(() => { throw new NotFoundError('Извините, такой страницы не существует'); });
 
 module.exports = router;
