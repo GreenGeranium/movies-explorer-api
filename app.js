@@ -5,6 +5,7 @@ const { errors } = require('celebrate');
 const helmet = require('helmet');
 
 // логирование
+const cors = require('cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const router = require('./routes');
 const { centralisedErrorHandler } = require('./errors/centralised-handler');
@@ -40,25 +41,28 @@ mongoose
 app.use(express.json());
 
 // CORS
+/*
 app.use((req, res, next) => {
-  /* const { origin } = req.headers; */
+  const { origin } = req.headers;
   const { method } = req;
   const requestHeaders = req.headers['access-control-request-headers'];
   const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
-  /*  if (allowedCors.includes(origin)) {
+  if (allowedCors.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
-  } */
-
-  res.header('Access-Control-Allow-Origin', '*');
-
+  }
   if (method === 'OPTIONS') {
     res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
     res.header('Access-Control-Allow-Headers', requestHeaders);
-    return res.end();
+    res.end();
   }
 
-  return next();
+  next();
 });
+*/
+
+app.use(cors({
+  origin: '*',
+}));
 
 app.use(requestLogger);
 
