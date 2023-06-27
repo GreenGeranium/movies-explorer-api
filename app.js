@@ -37,16 +37,18 @@ mongoose
     console.log(err);
   });
 
+app.use(express.json());
+
 // CORS
 app.use((req, res, next) => {
   const { origin } = req.headers;
   const { method } = req;
-  res.header('Access-Control-Allow-Credentials', true);
   const requestHeaders = req.headers['access-control-request-headers'];
   const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
-  if (allowedCors.includes(origin)) {
+  res.header('Access-Control-Allow-Origin', '*');
+  /*  if (allowedCors.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
-  }
+  } */
   if (method === 'OPTIONS') {
     res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
     res.header('Access-Control-Allow-Headers', requestHeaders);
@@ -55,8 +57,6 @@ app.use((req, res, next) => {
 
   next();
 });
-
-app.use(express.json());
 
 app.use(requestLogger);
 
