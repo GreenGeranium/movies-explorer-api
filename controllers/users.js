@@ -59,6 +59,7 @@ module.exports.getMyUser = (req, res, next) => {
     const user = {
       name: data.name,
       email: data.email,
+      _id: data._id,
     };
     res.send(user);
   }).catch(next);
