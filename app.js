@@ -19,6 +19,8 @@ const allowedCors = [
   'https://api.geranius.nomoredomains.rocks',
   'http://geranius.nomoredomains.rocks',
   'https://geranius.nomoredomains.rocks',
+  'https://geranius.nomoreparties.sbs',
+  'http://geranius.nomoreparties.sbs',
 ];
 
 // запуск сервера с дефолтным портом 3000
